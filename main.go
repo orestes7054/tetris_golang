@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/tetris_golang/board"
+	"tetris_golang/board"
+
 )
 
 
 func main() {
-
+	board.CreateBoard()
 }
