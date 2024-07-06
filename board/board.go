@@ -10,42 +10,49 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 )
-
-type Game struct {}
-
 const (
 	ScreenWidth  = 450
-	ScreenHeigth = 650
-	boardRows    = 10
-	boardCols    = 20
-	Padding = 50
+	ScreenHeight = 650
+	BlockSize = 20
+	BoardWidth = 10
+	BoardHeight = 20
+	Padding = 20
 )
+
+type Game struct {
+	board [BoardHeight][BoardWidth]int
+
+}
 
 var (
-	backGroundColor = color.RGBA{135, 132, 133, 80}
+	backGroundColor = color.RGBA{0, 0, 0, 255}
+	blockColor = color.RGBA{255,255,255,255}
 )
 
 
-func (g *Game) Layout(outSideWidth, outSideHeigth int) (screenWidth, screenHeigth int) {
-	return ScreenWidth - Padding, ScreenHeigth - Padding
+func (g *Game) Layout(outSideWidth, outSideHeigth int) (screenWidth, screenHeight int) {
+	return ScreenWidth, ScreenHeight
 }
 
 func (g *Game) Draw(screen *ebiten.Image){
 	screen.Fill(backGroundColor)
-	tileSize := (ScreenHeigth - Padding) / boardRows
-	for i:=0; i<=ScreenHeigth; i += tileSize {
-		vector.StrokeLine(screen, float32(0), float32(i), float32(ScreenWidth - Padding), float32(i), float32(0.5), color.Black, true)
+	
+	for y := 0; y < BoardHeight; y++ {
+		for x := 0; x < BoardWidth; x++ {
+			if g.board[y][x] != 0 {
+				vector.DrawFilledRect(screen, float32(Padding+x*BlockSize), float32(Padding+y*BlockSize), float32(BlockSize), float32(BlockSize), blockColor, true)
+			}
+		}
 	}
-
-	for i:=0; i<=ScreenWidth; i += tileSize {
-		vector.StrokeLine(screen, float32(i), float32(0), float32(i), float32(ScreenHeigth - Padding), float32(0.5), color.Black, true)
-	}
-
 
 }
 
 func (g *Game) Update() error {
 	return nil
+}
+
+func NewGame() *Game{
+	return &Game{}
 }
 
 func CreateBoard() {
@@ -62,11 +69,15 @@ func CreateBoard() {
 	}
 	icon := []image.Image{img}
 
-	ebiten.SetWindowSize(ScreenWidth, ScreenHeigth)
+	ebiten.SetWindowSize(ScreenWidth, ScreenHeight)
 	ebiten.SetWindowTitle("Tetris Game Golang")
 	ebiten.SetWindowIcon(icon)
-	game := &Game{}
+	game := NewGame()
 
+	game.board[0][0] = 1
+	game.board[1][1] = 1
+	game.board[2][2] = 1
+	
 	if err := ebiten.RunGame(game); err != nil {
 		panic(err)
 	}
