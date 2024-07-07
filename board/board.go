@@ -8,8 +8,9 @@ import (
 	"os"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
-	"tetris_golang/tetrominos"
 )
+
+
 const (
 	ScreenWidth  = 450
 	ScreenHeight = 650
@@ -45,6 +46,8 @@ func (g *Game) Draw(screen *ebiten.Image){
 		}
 	}
 
+
+	
 }
 
 func (g *Game) Update() error {
@@ -74,12 +77,6 @@ func CreateBoard() {
 	ebiten.SetWindowIcon(icon)
 	game := NewGame()
 
-	shapes := tetrominos.Shapes
-
-	cube := shapes[0]
-
-	fmt.Println(cube)
-	
 
 	if err := ebiten.RunGame(game); err != nil {
 		panic(err)
