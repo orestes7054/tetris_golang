@@ -23,6 +23,17 @@ const (
 	Padding = 20
 )
 
+type FieldSize struct {
+    Width  int
+    Height int
+}
+
+var ActualFieldSize = FieldSize{
+	Width:  BoardWidth * BlockSize,
+	Height: BoardHeight * BlockSize, 
+}
+
+
 type Game struct {
 	board [BoardHeight][BoardWidth]int
 
@@ -32,6 +43,12 @@ var (
 	backGroundColor = color.RGBA{64, 64, 64, 0}
 	blockColor = color.RGBA{255,128,0,255}
 	lineColor = color.RGBA{0,0,0,255}
+	itialPosition = tetrominos.ActualPosition{
+							X: int(float64(ActualFieldSize.Width /2)), 
+							Y: int(float64(ActualFieldSize.Height /2)),
+					}
+
+
 )
 
 
@@ -43,7 +60,7 @@ func (g *Game) Draw(screen *ebiten.Image){
 	screen.Fill(backGroundColor)
 
 	cube := tetrominos.Cube
-	tetrominos.WriteFigure(screen, cube, BlockSize, blockColor)
+	tetrominos.WriteFigure(screen, cube, BlockSize, blockColor, itialPosition)
 	
 
 	// the BlockSize * X moves the block two blocks to the right idem with BlockSize * Y
@@ -94,6 +111,7 @@ func CreateBoard() {
 	ebiten.SetWindowIcon(icon)
 	game := NewGame()
 
+	fmt.Printf("Value of initial position x: %s, y: %s", itialPosition.X, itialPosition.Y )
 
 	if err := ebiten.RunGame(game); err != nil {
 		panic(err)

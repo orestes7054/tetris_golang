@@ -25,11 +25,20 @@ var Cube = Tetromino{
 	Color: 1,
 }
 
-func WriteFigure(screen *ebiten.Image, figure Tetromino, blockSize int, blockColor color.RGBA) {
+type ActualPosition struct{
+	X, Y int
+}
+
+
+
+
+func WriteFigure(screen *ebiten.Image, figure Tetromino, blockSize int, blockColor color.RGBA, position ActualPosition) {
 
 	for _, rotation := range figure.Rotations{
 		for _, point := range rotation{
-			vector.DrawFilledRect(screen, float32(point.X * blockSize), float32(point.Y * blockSize), float32(blockSize), float32(blockSize), blockColor, true)
+			vector.DrawFilledRect(screen, float32(point.X * blockSize + position.X) , float32(point.Y * blockSize + position.Y), 
+					float32(blockSize), float32(blockSize),blockColor, true,
+				)
 		}
 	}
 
