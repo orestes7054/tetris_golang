@@ -6,6 +6,8 @@ import (
 	"image/color"
 	"image/png"
 	"os"
+	"tetris_golang/tetrominos"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	//"tetris_golang/tetrominos"
@@ -39,11 +41,17 @@ func (g *Game) Layout(outSideWidth, outSideHeigth int) (screenWidth, screenHeigh
 
 func (g *Game) Draw(screen *ebiten.Image){
 	screen.Fill(backGroundColor)
+
+	cube := tetrominos.Cube
+	tetrominos.WriteFigure(screen, cube, BlockSize, blockColor)
 	
 
-	vector.DrawFilledRect(screen,float32(0), float32(0), float32(BlockSize), float32(BlockSize), blockColor, true)
 	// the BlockSize * X moves the block two blocks to the right idem with BlockSize * Y
-	vector.DrawFilledRect(screen,float32(BlockSize * 2), float32(BlockSize), float32(BlockSize), float32(BlockSize), blockColor, true)
+	// In this example a Cube is Draw in the board in the posision 0, 0 to bottom left
+	// vector.DrawFilledRect(screen,float32(0), float32(0), float32(BlockSize), float32(BlockSize), blockColor, true)
+	// vector.DrawFilledRect(screen,float32(BlockSize), float32(0), float32(BlockSize), float32(BlockSize), blockColor, true)
+	// vector.DrawFilledRect(screen,float32(0), float32(BlockSize), float32(BlockSize), float32(BlockSize), blockColor, true)
+	// vector.DrawFilledRect(screen,float32(BlockSize), float32(BlockSize), float32(BlockSize), float32(BlockSize), blockColor, true)
 
 	
 	for x := 0; x < BoardWidth; x++ {
