@@ -15,12 +15,11 @@ import (
 
 
 const (
-	ScreenWidth  = 450
-	ScreenHeight = 650
-	BlockSize = 50
+	BlockSize = 35
 	BoardWidth = 10
 	BoardHeight = 20
-	Padding = 20
+	ScreenWidth  = BoardWidth * BlockSize 
+	ScreenHeight = BoardHeight * BlockSize
 )
 
 type FieldSize struct {
@@ -29,8 +28,8 @@ type FieldSize struct {
 }
 
 var ActualFieldSize = FieldSize{
-	Width:  BoardWidth * BlockSize,
-	Height: BoardHeight * BlockSize, 
+	Width:  BoardWidth,
+	Height: BoardHeight, 
 }
 
 
@@ -44,8 +43,8 @@ var (
 	blockColor = color.RGBA{255,128,0,255}
 	lineColor = color.RGBA{0,0,0,255}
 	itialPosition = tetrominos.ActualPosition{
-							X: int(float64(ActualFieldSize.Width /2)), 
-							Y: int(float64(ActualFieldSize.Height /2)),
+							X: int(float64(BoardWidth / 2)) - 1, 
+							Y: int(float64(BoardHeight / 2)) - 1, 
 					}
 
 

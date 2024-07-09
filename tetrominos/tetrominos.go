@@ -36,7 +36,7 @@ func WriteFigure(screen *ebiten.Image, figure Tetromino, blockSize int, blockCol
 
 	for _, rotation := range figure.Rotations{
 		for _, point := range rotation{
-			vector.DrawFilledRect(screen, float32(point.X * blockSize + position.X) , float32(point.Y * blockSize + position.Y), 
+			vector.DrawFilledRect(screen, float32((point.X + position.X) * blockSize ) , float32((point.Y + position.Y) * blockSize), 
 					float32(blockSize), float32(blockSize),blockColor, true,
 				)
 		}
