@@ -5,6 +5,7 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	"math/rand"
 	"os"
 	"tetris_golang/tetrominos"
 
@@ -34,7 +35,7 @@ var ActualFieldSize = FieldSize{
 
 
 type Game struct {
-	board [BoardHeight][BoardWidth]int
+	//board [BoardHeight][BoardWidth]int
 
 }
 
@@ -45,7 +46,11 @@ var (
 							X: int(float64(BoardWidth / 2)) - 1, 
 							Y: int(float64(BoardHeight / 2)) - 1, 
 					}
-
+	figures = tetrominos.FiguresMap
+	figuresNames = [5]string{"O", "I", "T", "S", "Z"}
+	pickedFigure = figuresNames[rand.Int31n(5)]
+	selectedTetromino = figures[pickedFigure]
+	startPosition =  rand.Int31n(int32(len(selectedTetromino.Rotations)))
 
 )
 
@@ -54,12 +59,12 @@ func (g *Game) Layout(outSideWidth, outSideHeigth int) (screenWidth, screenHeigh
 	return ScreenWidth, ScreenHeight
 }
 
+
 func (g *Game) Draw(screen *ebiten.Image){
 	screen.Fill(backGroundColor)
 
-	//piece_O := tetrominos.Cube
-	piece  := tetrominos.I
-	tetrominos.WriteFigure(screen, piece, BlockSize,  itialPosition, 0)
+
+	tetrominos.WriteFigure(screen, selectedTetromino, BlockSize,  itialPosition, int(startPosition))
 	
 
 	// the BlockSize * X moves the block two blocks to the right idem with BlockSize * Y
