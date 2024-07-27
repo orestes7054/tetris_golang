@@ -13,7 +13,7 @@ type Point struct {
 
 type Tetromino struct {
 	Rotations [][]Point
-	Color     int
+	Color     color.RGBA
 }
 
 var Cube = Tetromino{
@@ -22,8 +22,39 @@ var Cube = Tetromino{
 			{0, 0}, {1, 0}, {0, 1}, {1, 1},
 		},
 	},
-	Color: 1,
+	Color: color.RGBA{0, 255, 255, 255}, // Cian
 }
+
+var I = Tetromino{
+	Rotations: [][]Point{
+		{
+			{0, 1}, {1, 1}, {2, 1}, {3, 1},
+		},
+		{
+			{1, 0}, {1, 1}, {1, 2}, {1, 3},
+		},
+	},
+	Color: color.RGBA{255, 255, 0, 255}, // Amarillo
+}
+
+var T = Tetromino{
+	Rotations: [][]Point{
+		{
+			{1, 0}, {0, 1}, {1, 1}, {2, 1},
+		},
+		{
+			{1, 0}, {1, 1}, {1, 2}, {0, 1},
+		},
+		{
+			{0, 1}, {1, 1}, {2, 1}, {1, 2},
+		},
+		{
+			{1, 0}, {1, 1}, {1, 2}, {2, 1},
+		},
+	},
+	Color: color.RGBA{128, 0, 128, 255}, // Púrpura
+}
+
 
 type ActualPosition struct{
 	X, Y int
@@ -32,15 +63,19 @@ type ActualPosition struct{
 
 
 
-func WriteFigure(screen *ebiten.Image, figure Tetromino, blockSize int, blockColor color.RGBA, position ActualPosition) {
+func WriteFigure(screen *ebiten.Image, figure Tetromino, blockSize int, position ActualPosition, positionIndex int) {
 
-	for _, rotation := range figure.Rotations{
-		for _, point := range rotation{
-			vector.DrawFilledRect(screen, float32((point.X + position.X) * blockSize ) , float32((point.Y + position.Y) * blockSize), 
-					float32(blockSize), float32(blockSize),blockColor, true,
-				)
-		}
+	rotation := figure.Rotations[positionIndex]
+	figureColor := figure.Color
+
+	for _, point := range rotation{
+		x := float32((point.X + position.X))
+		y := float32((point.Y + position.Y))
+
+		vector.DrawFilledRect(screen, x * float32(blockSize) ,  y * float32(blockSize), 
+							  float32(blockSize), float32(blockSize), figureColor, true,
+							  )
 	}
-
+	
 
 }

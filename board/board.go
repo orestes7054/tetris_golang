@@ -40,7 +40,6 @@ type Game struct {
 
 var (
 	backGroundColor = color.RGBA{64, 64, 64, 0}
-	blockColor = color.RGBA{255,128,0,255}
 	lineColor = color.RGBA{0,0,0,255}
 	itialPosition = tetrominos.ActualPosition{
 							X: int(float64(BoardWidth / 2)) - 1, 
@@ -58,8 +57,9 @@ func (g *Game) Layout(outSideWidth, outSideHeigth int) (screenWidth, screenHeigh
 func (g *Game) Draw(screen *ebiten.Image){
 	screen.Fill(backGroundColor)
 
-	cube := tetrominos.Cube
-	tetrominos.WriteFigure(screen, cube, BlockSize, blockColor, itialPosition)
+	//piece_O := tetrominos.Cube
+	piece  := tetrominos.I
+	tetrominos.WriteFigure(screen, piece, BlockSize,  itialPosition, 0)
 	
 
 	// the BlockSize * X moves the block two blocks to the right idem with BlockSize * Y
@@ -68,17 +68,12 @@ func (g *Game) Draw(screen *ebiten.Image){
 	// vector.DrawFilledRect(screen,float32(BlockSize), float32(0), float32(BlockSize), float32(BlockSize), blockColor, true)
 	// vector.DrawFilledRect(screen,float32(0), float32(BlockSize), float32(BlockSize), float32(BlockSize), blockColor, true)
 	// vector.DrawFilledRect(screen,float32(BlockSize), float32(BlockSize), float32(BlockSize), float32(BlockSize), blockColor, true)
-
 	
 	for x := 0; x < BoardWidth; x++ {
 		for y := 0; y < BoardHeight; y++ {
 			vector.StrokeRect(screen, float32(x * BlockSize), float32(y * BlockSize), float32(BlockSize), float32(BlockSize), float32(0.50), lineColor, true)
 		}
 	}
-
-
-	
-
 
 	
 }
@@ -110,7 +105,6 @@ func CreateBoard() {
 	ebiten.SetWindowIcon(icon)
 	game := NewGame()
 
-	fmt.Printf("Value of initial position x: %s, y: %s", itialPosition.X, itialPosition.Y )
 
 	if err := ebiten.RunGame(game); err != nil {
 		panic(err)
