@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"os"
 	"tetris_golang/tetrominos"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
@@ -35,7 +36,11 @@ var ActualFieldSize = FieldSize{
 
 
 type Game struct {
-	//board [BoardHeight][BoardWidth]int
+	board [BoardHeight][BoardWidth]int
+	lastTime time.Time
+	interval time.Duration
+	selectedTetromino tetrominos.Tetromino
+	tetrominoPosition int
 
 }
 
@@ -48,9 +53,6 @@ var (
 					}
 	figures = tetrominos.FiguresMap
 	figuresNames = [5]string{"O", "I", "T", "S", "Z"}
-	pickedFigure = figuresNames[rand.Int31n(5)]
-	selectedTetromino = figures[pickedFigure]
-	startPosition =  rand.Int31n(int32(len(selectedTetromino.Rotations)))
 
 )
 
@@ -63,16 +65,8 @@ func (g *Game) Layout(outSideWidth, outSideHeigth int) (screenWidth, screenHeigh
 func (g *Game) Draw(screen *ebiten.Image){
 	screen.Fill(backGroundColor)
 
+	tetrominos.WriteFigure(screen, g.selectedTetromino, BlockSize,  itialPosition, int(g.tetrominoPosition))
 
-	tetrominos.WriteFigure(screen, selectedTetromino, BlockSize,  itialPosition, int(startPosition))
-	
-
-	// the BlockSize * X moves the block two blocks to the right idem with BlockSize * Y
-	// In this example a Cube is Draw in the board in the posision 0, 0 to bottom left
-	// vector.DrawFilledRect(screen,float32(0), float32(0), float32(BlockSize), float32(BlockSize), blockColor, true)
-	// vector.DrawFilledRect(screen,float32(BlockSize), float32(0), float32(BlockSize), float32(BlockSize), blockColor, true)
-	// vector.DrawFilledRect(screen,float32(0), float32(BlockSize), float32(BlockSize), float32(BlockSize), blockColor, true)
-	// vector.DrawFilledRect(screen,float32(BlockSize), float32(BlockSize), float32(BlockSize), float32(BlockSize), blockColor, true)
 	
 	for x := 0; x < BoardWidth; x++ {
 		for y := 0; y < BoardHeight; y++ {
@@ -83,12 +77,30 @@ func (g *Game) Draw(screen *ebiten.Image){
 	
 }
 
+func returnTetrominoSelected() (tetrominos.Tetromino, int){
+	pickedFigure := figuresNames[rand.Int31n(5)]
+	selectedTetromino := figures[pickedFigure]
+	startPosition :=  rand.Int31n(int32(len(selectedTetromino.Rotations)))
+	return selectedTetromino, int(startPosition)
+}
+
 func (g *Game) Update() error {
+	actualTime := time.Now()
+	if(actualTime.Sub(g.lastTime) > g.interval){
+		g.lastTime = actualTime
+		g.selectedTetromino, g.tetrominoPosition = returnTetrominoSelected()
+	}
 	return nil
+	
 }
 
 func NewGame() *Game{
-	return &Game{}
+	return &Game{
+		lastTime: time.Now(),
+		interval: 2 * time.Second,
+		selectedTetromino: figures["O"],
+		tetrominoPosition: 0,
+	}
 }
 
 func CreateBoard() {
